@@ -7,6 +7,9 @@ import com.pedropathing.geometry.Pose
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
+import org.firstinspires.ftc.teamcode.src.utils.InitConfig
+import org.firstinspires.ftc.teamcode.src.utils.enums.Side
+import org.firstinspires.ftc.teamcode.src.utils.enums.Teams
 
 @Configurable
 @Autonomous(name = "Blue Spectator side")
@@ -22,13 +25,13 @@ class BlueSpectatorSide : LinearOpMode() {
             .setLinearHeadingInterpolation(startPose.heading, endPose.heading)
             .build()
 
+        InitConfig.changeSide(Side.SPECTATOR)
+        InitConfig.changeTeam(Teams.BLUE)
+
         waitForStart()
         follower.followPath(path)
         while(opModeIsActive()) {
-            telemetry.addData("Heading", follower.heading)
-            telemetry.addData("Heading", follower.headingError)
             follower.update()
-            telemetry.update()
         }
     }
 

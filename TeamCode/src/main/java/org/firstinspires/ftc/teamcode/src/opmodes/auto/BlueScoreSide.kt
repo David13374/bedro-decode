@@ -9,8 +9,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants
 import org.firstinspires.ftc.teamcode.src.core.Outtake
 import org.firstinspires.ftc.teamcode.src.utils.HardwareInit
+import org.firstinspires.ftc.teamcode.src.utils.InitConfig
 import org.firstinspires.ftc.teamcode.src.utils.enums.MotorEnum
 import org.firstinspires.ftc.teamcode.src.utils.enums.ServoEnum
+import org.firstinspires.ftc.teamcode.src.utils.enums.Side
+import org.firstinspires.ftc.teamcode.src.utils.enums.Teams
 
 @Autonomous(name = "Blue Score Side")
 class BlueScoreSide : OpMode() {
@@ -43,6 +46,10 @@ class BlueScoreSide : OpMode() {
 
         Outtake.init()
         Outtake.changeState(Outtake.OuttakeState.READY)
+        Outtake.setServoPosition(Outtake.ReadyServoPos)
+
+        InitConfig.changeSide(Side.SCORE)
+        InitConfig.changeTeam(Teams.BLUE)
 
         buildPaths()
     }

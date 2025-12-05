@@ -54,6 +54,12 @@ object Outtake {
             currentState = nextState
             timer.reset()
         }
+        /*Intake.setIntakePower(if(
+            currentLeftServoState == SortServoState.OPENED
+            || currentRightServoState == SortServoState.OPENED)
+            Intake.outPower
+        else Intake.stopPower
+        )*/
         when (currentState) {
             OuttakeState.READY -> {
                 if(timer.time() >= readyTime) {
@@ -75,12 +81,14 @@ object Outtake {
             }
 
             OuttakeState.SHOOT -> {
-                if (timer.milliseconds() >= motorAccelTime)
+                if (timer.milliseconds() >= motorAccelTime && timer.time() <= motorStopTime + motorAccelTime)
                     outtakeServo.position = ShootServoPos
                 if(timer.time() <= motorStopTime + motorAccelTime)
                     setMotorPower(CloseMotorPower)
-                else
+                else {
                     setMotorPower(0.0)
+                    setServoPosition(WaitingServoPos)
+                }
             }
         }
     }
@@ -97,10 +105,12 @@ object Outtake {
         when(currentLeftServoState) {
             SortServoState.CLOSED -> {
                 setLeftServoPos(sortServoLeftClose)
+                Intake.changeState(Intake.IntakeState.OFF, true)
                 currentLeftServoState = SortServoState.OPENED
             }
             SortServoState.OPENED -> {
                 setLeftServoPos(sortServoLeftOpen)
+                Intake.changeState(Intake.IntakeState.IN, true)
                 currentLeftServoState = SortServoState.CLOSED
             }
         }
@@ -110,10 +120,12 @@ object Outtake {
         when(currentRightServoState) {
             SortServoState.CLOSED -> {
                 setRightServoPos(sortServoRightClose)
+                Intake.changeState(Intake.IntakeState.OFF, true)
                 currentRightServoState = SortServoState.OPENED
             }
             SortServoState.OPENED -> {
                 setRightServoPos(sortServoRightOpen)
+                Intake.changeState(Intake.IntakeState.IN, true)
                 currentRightServoState = SortServoState.CLOSED
             }
         }

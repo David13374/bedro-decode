@@ -23,9 +23,13 @@ object Intake {
         intake.power = 0.0
     }
 
-    fun changeState(newState: IntakeState) {
-        currentState = if (newState == currentState) IntakeState.OFF
-        else newState
+    fun changeState(newState: IntakeState, override: Boolean = false) {
+        currentState = if(override) {
+            newState
+        } else {
+            if (newState == currentState) IntakeState.OFF
+            else newState
+        }
 
         when (currentState) {
             IntakeState.IN -> setIntakePower(inPower)
